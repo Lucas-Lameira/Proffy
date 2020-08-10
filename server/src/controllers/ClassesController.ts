@@ -21,7 +21,7 @@ export default class ClassesController {
 
         if(!filters.week_day || !filters.subject || !filters.time){
             return response.status(400).json({
-                error_message: "Missing search filters"
+                error: "Missing search filters"
             })
         }
 
@@ -31,7 +31,7 @@ export default class ClassesController {
             .whereExists(function() {
                 this.select('class_schedule.*')
                     .from('class_schedule')
-                    .whereRaw('`class_schedule`.`class_id` = `classes`.`ìd`')
+                    .whereRaw('`class_schedule`.`class_id` = `classes`.`id`')
                     .whereRaw('`class_schedule`.`week_day` = ??', [Number(week_day)])
                     .whereRaw('`class_schedule`.`from` <= ??', [timeInMinutes])
                     .whereRaw('`class_schedule`.`to` > ??', [timeInMinutes])
@@ -42,7 +42,6 @@ export default class ClassesController {
 
         return response.json(classes);
     }
-
 
     async create (request: Request, response: Response) {
        const {name, avatar, whatsapp, bio, subject, cost, schedule} = request.body;
@@ -69,10 +68,10 @@ export default class ClassesController {
          
           const classSchedule = schedule.map((scheduleItem:ScheduleItem) => {
             return{
-               class_id,
                week_day: scheduleItem.week_day,
                from: convertHourToMinutes(scheduleItem.from),
                to: convertHourToMinutes(scheduleItem.to),
+               class_id,
             }
           })
       
