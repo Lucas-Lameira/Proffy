@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
         maxWidth: 160,
         marginVertical: 60
     },
+
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    
 })
 
 
